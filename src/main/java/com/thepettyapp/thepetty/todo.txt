@@ -1,0 +1,16 @@
+1. SPRING JPA and MySQL for interacting with the database
+    - to implement PetRepository to save/retrieve/update pet info
+    - initial pet creation when the app starts
+2. REST API endpoints (providing a way for the front end to request and update data)
+    - GET /pet: return current pet data
+    - POST /pet/feed: update hunger value
+    - POST /pet/play: update energy value
+    - POST /pet/health
+3. GAME LOGIC
+    - feeding logic (+5 to hunger)
+    - playing logic (+5 to energy)
+    - increasing health (hunger && energy > 70)
+    - decreasing health (hunger && energy < 30)
+    - hunger logic (-2 to hunger every 1 min)
+    - energy logic (-2 to energy every 1 min)
+4. CONNECTING TO FRONT END (sending JSON data when the front end requests it)
