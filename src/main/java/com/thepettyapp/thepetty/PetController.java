@@ -18,12 +18,20 @@ public class PetController {
         this.petService = petService;
     }
 
+    //ALLOW CORS REQUESTS WHATEVER
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/changeName")
     public ResponseEntity<Pet> changeName(@RequestBody Map<String, String> payload) {
         String newName = payload.get("name");
         Pet updatedPet = petService.changeNameAPI(newName);
         System.out.println(ResponseEntity.ok(updatedPet));
+        return ResponseEntity.ok(updatedPet);
+    }
+
+    @PostMapping("/dodep")
+    public ResponseEntity<Pet> dodep(@RequestBody Map<String, Integer> payload) {
+        int dodep = payload.get("dodep");
+        Pet updatedPet = petService.increaseBalance(dodep);
         return ResponseEntity.ok(updatedPet);
     }
 

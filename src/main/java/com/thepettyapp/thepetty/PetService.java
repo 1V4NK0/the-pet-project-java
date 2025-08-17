@@ -75,16 +75,16 @@ public class PetService {
         return petRepository.save(pet);
     }
 
-    public Pet decreaseEnergy() {
-        pet.setEnergy(pet.getEnergy() - 2);
+    public Pet decreaseEnergy(int amount) {
+        pet.setEnergy(pet.getEnergy() - amount);
         return petRepository.save(pet);
     }
 
     public Pet play() {
-        if (pet.getEnergy() - 2 >= 0 && pet.getHunger() - 1 >= 0) {
-            decreaseEnergy();
+        if (pet.getEnergy() - 10 >= 0 && pet.getHunger() - 1 >= 0) {
+            decreaseEnergy(10);
             decreaseHunger();
-            pet.setBalance(pet.getBalance() + 1);
+//            pet.setBalance(pet.getBalance() + 1);
         }
         return petRepository.save(pet);
     }
@@ -125,6 +125,11 @@ public class PetService {
         //TO IMPLEMENT:
         //IF HUNGER && ENERGY < 50 -> HEALTH-- EVERY 30 SEC
         pet.setHealth(pet.getHealth() + amount);
+        return petRepository.save(pet);
+    }
+
+    public Pet increaseBalance(int amount) {
+        pet.setBalance(pet.getBalance() + amount);
         return petRepository.save(pet);
     }
 }
