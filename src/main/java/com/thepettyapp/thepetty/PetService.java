@@ -10,21 +10,17 @@ import java.util.TimerTask;
 public class PetService {
     private final PetRepository petRepository;
     private Pet pet;
-    Timer timer;
+
     //TO DO:
     //INTRODUCE BOUNDARIES FOR METHODS: IF pet.getHunger() + 2 > 100, then pet.setHunger(100)
     public Pet decreaseHunger() {
-        if (pet.getHunger() - 1 >= 0) {
-            pet.setHunger(pet.getHunger() - 1);
+        if (pet.getHunger() - 2 >= 0) {
+            pet.setHunger(pet.getHunger() - 2);
         }
         return petRepository.save(pet);
     }
 
-//    @Scheduled(fixedRate = 3000)
-//    public void autoDecreaseHunger() {
-//        decreaseHunger();
-//        this.pet = petRepository.save(pet);
-//    }
+
     public Pet changeNameAPI(String newName) {
         this.pet.setName(newName);
         this.pet = petRepository.save(pet);
@@ -33,7 +29,7 @@ public class PetService {
 
     public PetService(PetRepository petRepository) {
         this.petRepository = petRepository;
-        timer = new Timer();
+
 
         //IN THE FUTURE YOU'D WANT TO FETCH PET BASED ON THE USER ID OR WHATEVER, NOT JUST ONE HARDCODED PET
         this.pet = fetchPet(1);
@@ -80,6 +76,13 @@ public class PetService {
         return petRepository.save(pet);
     }
 
+    public Pet decreaseEnergy() {
+        if (pet.getEnergy() - 2 >= 0) {
+            pet.setEnergy(pet.getEnergy() - 2);
+        }
+        return petRepository.save(pet);
+    }
+
     public Pet play() {
         if (pet.getEnergy() - 10 >= 0 && pet.getHunger() - 1 >= 0) {
             decreaseEnergy(10);
@@ -105,14 +108,7 @@ public class PetService {
         return petRepository.save(pet);
     }
 
-//    @Scheduled(fixedRate = 10000)
-//    public void autoDecreaseHealth() {
-//        if (pet.getHunger() < 50 && pet.getEnergy() < 50) {
-//            decreaseHealth();
-//        }
-//        this.pet = petRepository.save(pet);
-//
-//    }
+
 
     public Pet increaseHealth() {
         //TO IMPLEMENT:
@@ -129,7 +125,10 @@ public class PetService {
     }
 
     public Pet increaseBalance(int amount) {
+        System.out.println("INSIDE increaseBalance... PET SERVICE");
+        System.out.println("OLD BALANCE: " + pet.getBalance());
         pet.setBalance(pet.getBalance() + amount);
+        System.out.println("NEW BALANCE: " + pet.getBalance());
         return petRepository.save(pet);
     }
 }

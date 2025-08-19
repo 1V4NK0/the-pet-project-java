@@ -1,14 +1,17 @@
 package com.thepettyapp.thepetty;
 
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/pets")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class PetController {
     private final PetService petService;
 
@@ -19,7 +22,7 @@ public class PetController {
     }
 
     //ALLOW CORS REQUESTS WHATEVER
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "*")
     @PostMapping("/changeName")
     public ResponseEntity<Pet> changeName(@RequestBody Map<String, String> payload) {
         String newName = payload.get("name");
@@ -28,10 +31,26 @@ public class PetController {
         return ResponseEntity.ok(updatedPet);
     }
 
+    //defines a GET endpoint, produces = MediaType.TEXT_EVENT_STREAM_VALUE means continuous stream of data instead of one static JSON
+    @GetMapping(value = "/sse/pet-stats", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Pet> streamPetStats() {
+        return Flux.interval(Duration.ofSeconds(15))
+                .map(tick -> {
+                    petService.decreaseEnergy();
+                    petService.decreaseHunger();
+                    return petService.fetchPet(1);
+                });
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/dodep")
     public ResponseEntity<Pet> dodep(@RequestBody Map<String, Integer> payload) {
-        int dodep = payload.get("dodep");
+        System.out.println("\nINSIDE PET CONTROLLER DODEP METHOD");
+        System.out.println("received dodep payload: " + payload);
+        int dodep =  payload.get("amount");
+        System.out.println("dodep amount: " + dodep);
         Pet updatedPet = petService.increaseBalance(dodep);
+        System.out.println("updated pet balance: " + updatedPet.getBalance());
         return ResponseEntity.ok(updatedPet);
     }
 
